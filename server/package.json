@@ -11,10 +11,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@firebase/app-compat": "^0.2.32",
+    "@firebase/firestore-compat": "^0.3.30",
     "axios": "^1.6.8",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "firebase": "^10.11.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },

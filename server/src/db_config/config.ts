@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import dotenv from 'dotenv'
+import { getFirestore } from "firebase/firestore";
 dotenv.config()
 
 const app = initializeApp({
@@ -11,4 +12,6 @@ const app = initializeApp({
     appId: process.env.db_AppId
 });
 
-export default app;
+const db = getFirestore(app);
+
+export default db;

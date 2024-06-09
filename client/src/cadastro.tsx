@@ -1,7 +1,35 @@
 import logo from './assets/logo.png'
 import image4 from './assets/image4.svg'
+import { FormEvent, useState } from 'react'
+import axios from 'axios'
 
 export default function Cadastro (){
+    const [name, setName] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+
+    const send_signup = async(event: FormEvent<HTMLFormElement>) => {
+        try {
+            event.preventDefault()
+            const request = await axios.post('http://localhost:1024/v1/cadastro',{
+                username:name,
+                usermail:email,
+                password: password
+            })
+            if (request.status !== 200) {
+                console.log(request.data.msg)
+                return request.data.msg
+            }
+            setTimeout(() => {
+                console.log(request.data.msg)
+                window.location.href = '/v1/login'
+                return request.data.msg
+            },3500)
+        } catch (e){
+            console.log(e)
+            return e;
+        }
+    }
     return(
         <>
             <nav className="bg-white border-gray-200" id="navbar">
@@ -71,18 +99,18 @@ export default function Cadastro (){
 
                     <p className="font-bold justify-center align-center flex">Preparado para iniciar sua jornada? 🔥</p>
 
-                    <form className="max-w-sm mx-auto">
+                    <form className="max-w-sm mx-auto" onSubmit={(event) => send_signup(event)}>
+                        <div className="mb-5">
+                            <label htmlFor="username-password" className="block mb-2 text-sm font-medium text-[#505050] ">Nome do usuario</label>
+                            <input type="username" onChange={(event) => setName(event.target.value)} id="username" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[18px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
+                        </div>
                         <div className="mb-5">
                             <label htmlFor="email" className="block mb-2 text-sm font-medium text-[#505050]">Email</label>
-                            <input type="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[18px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " required />
+                            <input type="email" id="email" onChange={(event) => setEmail(event.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[18px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " required />
                         </div>
                         <div className="mb-5">
                             <label htmlFor="password" className="block mb-2 text-sm font-medium text-[#505050] ">Senha</label>
-                            <input type="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[18px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
-                        </div>
-                        <div className="mb-5">
-                            <label htmlFor="repeat-password" className="block mb-2 text-sm font-medium text-[#505050] ">Repetir senha</label>
-                            <input type="password" id="repeat-password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[18px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
+                            <input type="password" onChange={(event) => setPassword(event.target.value)} id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[18px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
                             <div className="space-y-3 mt-[5px]">
                                 <label htmlFor="terms" className="ms-2 text-sm font-medium text-[#505050]">Já possui uma conta? <a href="/login" className="text-blue-600 hover:underline">Fazer login</a></label>
                                 <button type="submit" className="px-5 py-3 text-base font-medium text-center text-white rounded-full focus:ring-4 focus:ring-blue-300 w-[35%] bg-[#24B1EE] justify-center flex">Cadastrar</button>    

@@ -1,7 +1,34 @@
 import logo from './assets/logo.png'
 import image2 from './assets/image2.svg'
+import { FormEvent, useState } from 'react'
+import axios from 'axios'
 
 export default function Login () {
+  const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
+
+  const send_signin = async(event: FormEvent<HTMLFormElement>) => {
+    try {
+      event.preventDefault();
+      const request = await axios.post('http://localhost:1024/v1/login', {
+        usermail: email,
+        password:password
+      })
+      if (request.status !== 200) {
+        console.log(request.data.msg)
+        return request.data.msg
+      }
+      setTimeout(() => {
+        console.log(request.data.msg)
+        window.location.href = '/'
+        return request.data.msg
+      },3500)
+    } catch (e) {
+      console.log(e)
+      return e;
+    }
+  }
+
     return(
         <>
             <nav className="bg-white border-gray-200" id="navbar">
@@ -69,18 +96,18 @@ export default function Login () {
                         LOGIN
                     </h2>  
                     <p className="font-bold justify-center align-center flex">É bom ver você novamente 👋</p>  
-                    <form className="mt-8 space-y-6" action="#">
+                    <form className="mt-8 space-y-6" onSubmit={(event) => send_signin(event)}>
                         <div>
                             <label htmlFor="email" className="block mb-2 text-sm font-medium text-[#505050]">Email</label>
-                            <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[18px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
+                            <input type="email" onChange={(event) => setEmail(event.target.value)} name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[18px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
                         </div>
                         <div>
                             <label htmlFor="password" className="block mb-2 text-sm font-medium text-[#505050]">Senha</label>
-                            <input type="password" name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[18px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
+                            <input type="password" onChange={(event) => setPassword(event.target.value)} name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[18px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
                         </div>
                         <div className="flex items-start">
                             <div className="flex items-center h-5">
-                                <input id="remember" aria-describedby="remember" name="remember" type="checkbox" className="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300" required />
+                                <input id="remember" aria-describedby="remember" name="remember" type="checkbox" className="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300" />
                             </div>
                             <div className="ms-3 text-sm">
                             <label htmlFor="remember" className="font-medium text-gray-500">Lembrar de mim</label>

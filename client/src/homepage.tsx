@@ -2,8 +2,36 @@ import logo from './assets/logo.png'
 import picture1 from './assets/picture1.jpg'
 import picture2 from './assets/picture2.png'
 import picture3 from './assets/picture3.jpg'
+import { useState } from 'react'
+import axios from 'axios'
 
 function homepage() {
+    const [name, setName] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
+    const [message, setMessage] = useState<string>("");
+
+    const send_message = async() => {
+        try {
+            const request = await axios.post('http://localhost:1024/v1/send_message', {
+                name: name,
+                email: email,
+                message: message
+            })
+            if (request.status != 200) {
+                console.log(request.data.msg)
+                return request.data.msg
+            }
+            setTimeout(() => {
+                console.log( request.data.msg)
+                window.location.href = '/'
+                return request.data.msg
+            },1000)
+        } catch (e) {
+            console.log(e)
+            return e
+        }
+    }
+
   return (
     <>
       <nav className="bg-white border-gray-200" id="navbar">
@@ -137,14 +165,14 @@ function homepage() {
     <b><h1 className="justify-center align-center flex mt-10 p-0 text-neutral-500 font-bold text-xl mb-8"> CONTATO ☎️</h1></b>
     <div className="flex flex-col justify-center items-start mx-auto w-1/2" id="Contato">
         <h1 className="text-[18px] pb-[6px]"><b>Nome</b></h1>
-        <input type="text" className="rounded-[16px] bg-white w-full text-[16px] pl-[15px] pr-[15px] h-[36px] rounded-lg mb-8"/>
+        <input type="text" onChange={(event) => setName(event.target.value)} className="rounded-[16px] bg-white w-full text-[16px] pl-[15px] pr-[15px] h-[36px] rounded-lg mb-8"/>
         <h1 className="text-[18px] pt-[20px] pb-[6px]"><b>Email</b></h1>
-        <input type="text" className="rounded-[16px] bg-white w-full text-[16px] pl-[15px] pr-[15px] h-[36px] rounded-lg mb-8"/>
+        <input type="text" onChange={(event) => setEmail(event.target.value)} className="rounded-[16px] bg-white w-full text-[16px] pl-[15px] pr-[15px] h-[36px] rounded-lg mb-8"/>
         <h1 className="text-[18px] pt-[20px] pb-[6px]"><b>Mensagem</b></h1>
-        <textarea className="rounded-lg bg-white w-full text-[16px] pl-[15px] pr-[15px] h-[150px]"></textarea>
+        <textarea onChange={(event) => setMessage(event.target.value)} className="rounded-lg bg-white w-full text-[16px] pl-[15px] pr-[15px] h-[150px]"></textarea>
     </div>
     <div className="flex justify-center space-x-4">
-        <button className="bg-blue-600 p-2 rounded-xl text-white p-3 mt-8 mb-8"><b>Enviar</b></button>
+        <button className="bg-blue-600 p-2 rounded-xl text-white p-3 mt-8 mb-8" onClick={send_message}><b>Enviar</b></button>
         <button className="bg-red-600 p-2 rounded-xl text-white p-3 mt-8 mb-8"><b>Limpar</b></button>
     </div>
     <h1 className="text-center text-[#191919] hover:text-blue-700 mb-4"><a href="#"><b>©Copyright</b></a></h1>
